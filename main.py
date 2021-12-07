@@ -1,16 +1,19 @@
 import cv2 # Video Capturing / Image Processing
-import numpy as np
+import numpy as np # Array manipulation
 
-# initialize the HOG descriptor/person detector
-hog = cv2.HOGDescriptor()
-hog.setSVMDetector(cv2.HOGDescriptor_getDefaultPeopleDetector())
+from person_locator import * # Person detection
 
-cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)  # Begin Video Capturing
+
+# Begin Video Capturing
+cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
 
 # Check for successful video access
 if not (cap.isOpened()):
     print("Could not open video device")
     exit(1)  # Exit the program with error code
+
+# Create our HOG model
+model = CreateHog()
 
 
 # Main Loop
@@ -23,10 +26,8 @@ while True:
     # using a greyscale picture, also for faster detection
     gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
 
-
-    # detect people in the image
-    # returns the bounding boxes for the detected objects
-    boxes, weights = hog.detectMultiScale(frame, winStride=(8,8) )
+    # Use the hog model to detect people in the frames
+    (boxes, weights) = DetectPeople(frame, model)
 
     boxes = np.array([[x, y, x + w, y + h] for (x, y, w, h) in boxes])
 
