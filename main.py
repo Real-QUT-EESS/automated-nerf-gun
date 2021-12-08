@@ -7,7 +7,7 @@ from person_locator import * # Person detection
 cv2.startWindowThread()
 
 # Begin Video Capturing
-cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+cap = cv2.VideoCapture(0)
 
 # Check for successful video access
 if not (cap.isOpened()):
