@@ -3,8 +3,6 @@ import numpy as np # Array manipulation
 
 from person_locator import * # Person detection
 
-UseFacialDetection = 1
-
 # Put the video capturing in a seperate thread
 cv2.startWindowThread()
 
@@ -30,20 +28,22 @@ while True:
     # using a greyscale picture, also for faster detection
     gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
 
-    if UseFacialDetection:
-        for location in DetectFace(gray):
+    # Do facial detection
+    for location in DetectFace(gray):
             # Draw a rectangle around this face
             cv2.rectangle(frame, (location[3], location[0]), (location[1], location[2]), (0, 0, 255), 4)
-    else:
-        # Use the hog model to detect people in the frames
-        boxes = DetectPeople(gray, model)
+    
+    # Do body detection
+    # Use the hog model to detect people in the frames
+    boxes = DetectPeople(gray, model)
 
-        boxes = np.array([[x, y, x + w, y + h] for (x, y, w, h) in boxes])
+    # Convert boxes to array
+    boxes = np.array([[x, y, x + w, y + h] for (x, y, w, h) in boxes])
 
-        for (xA, yA, xB, yB) in boxes:
-            # display the detected boxes in the colour picture
-            cv2.rectangle(frame, (xA, yA), (xB, yB),
-                            (0, 255, 0), 2)
+    for (xA, yA, xB, yB) in boxes:
+        # display the detected boxes in the colour picture
+        cv2.rectangle(frame, (xA, yA), (xB, yB),
+                        (0, 255, 0), 2)
     
     
     # Display the resulting frame
