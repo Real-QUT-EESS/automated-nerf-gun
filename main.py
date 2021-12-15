@@ -8,7 +8,7 @@ from CoordinateConversion import * # Pixel Conversions
 cv2.startWindowThread()
 
 # Begin Video Capturing
-cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+cap = cv2.VideoCapture(0)
 
 screen_width = 640
 screen_height = 480
